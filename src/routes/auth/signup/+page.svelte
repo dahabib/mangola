@@ -22,7 +22,7 @@
 </script>
 
 <svelte:head>
-  <title>Create Account | Mango Paradise</title>
+  <title>Create Account | Mangola</title>
 </svelte:head>
 
 <div class="bg-gray-50 min-h-screen py-12 md:py-20">
@@ -31,7 +31,7 @@
       <div class="px-6 py-8">
         <div class="text-center mb-8">
           <h1 class="text-2xl font-bold text-gray-800">Create an Account</h1>
-          <p class="text-gray-600 mt-2">Join Mango Paradise for fresh, premium mangoes delivered to your door.</p>
+          <p class="text-gray-600 mt-2">Join Mangola for fresh, premium mangoes delivered to your door.</p>
         </div>
         
         {#if error}

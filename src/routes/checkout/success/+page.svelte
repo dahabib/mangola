@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-  <title>Order Confirmed | Mango Paradise</title>
+  <title>Order Confirmed | Mangola</title>
 </svelte:head>
 
 <div class="bg-gray-50 py-16">

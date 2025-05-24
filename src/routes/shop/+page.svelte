@@ -101,7 +101,7 @@
 </script>
 
 <svelte:head>
-  <title>Shop Mangoes | Mango Paradise</title>
+  <title>Shop Mangoes | Mangola</title>
 </svelte:head>
 
 <section class="py-10 bg-gradient-to-b from-primary-50 to-white">

@@ -41,9 +41,8 @@
       <!-- Company Info -->
       <div>
         <div class="mb-4">
-          <span class="text-xl font-display font-bold text-white">
-            Mango
-            <span class="text-primary-400">Paradise</span>
+          <span class="text-xl font-display font-bold text-primary-400">
+            Mangola
           </span>
         </div>
         <p class="text-gray-400 mb-4">
@@ -126,7 +125,7 @@
   <div class="border-t border-gray-800 py-6">
     <div class="container-custom flex flex-col md:flex-row justify-between items-center">
       <p class="text-sm text-gray-500 mb-4 md:mb-0">
-        &copy; {new Date().getFullYear()} Mango Paradise. All rights reserved.
+        &copy; {new Date().getFullYear()} Mangola. All rights reserved.
       </p>
       
       <div class="flex space-x-6">

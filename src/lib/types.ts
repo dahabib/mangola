@@ -7,6 +7,13 @@ export interface Product {
   category: string;
 }
 
+export interface Review {
+  name: string;
+  role: string;
+  image: string;
+  text: string;
+}
+
 export interface CartItem extends Product {
   quantity: number;
 }
@@ -23,7 +30,7 @@ export interface Order {
   userId: string;
   items: CartItem[];
   total: number;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
   shippingAddress: ShippingAddress;
   paymentIntent?: string;
   createdAt: Date;

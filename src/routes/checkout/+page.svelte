@@ -55,7 +55,7 @@
 </script>
 
 <svelte:head>
-  <title>Checkout | Mango Paradise</title>
+  <title>Checkout | Mangola</title>
 </svelte:head>
 
 <div class="bg-gray-50 py-12">

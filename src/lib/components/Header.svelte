@@ -38,8 +38,7 @@
       <!-- Logo -->
       <a href="/" class="flex items-center space-x-2">
         <span class="text-2xl font-display font-bold text-primary-700">
-          Mango
-          <span class="text-secondary-600">Paradise</span>
+          Mangola
         </span>
       </a>
       

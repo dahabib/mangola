@@ -39,7 +39,7 @@
 </script>
 
 <svelte:head>
-  <title>Account | Mango Paradise</title>
+  <title>Account | Mangola</title>
 </svelte:head>
 
 <div class="space-y-6">

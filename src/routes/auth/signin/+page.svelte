@@ -22,7 +22,7 @@
 </script>
 
 <svelte:head>
-  <title>Sign In | Mango Paradise</title>
+  <title>Sign In | Mangola</title>
 </svelte:head>
 
 <div class="bg-gray-50 min-h-screen py-12 md:py-20">
@@ -30,7 +30,7 @@
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
       <div class="px-6 py-8">
         <div class="text-center mb-8">
-          <h1 class="text-2xl font-bold text-gray-800">Sign In to Mango Paradise</h1>
+          <h1 class="text-2xl font-bold text-gray-800">Sign In to Mangola</h1>
           <p class="text-gray-600 mt-2">Welcome back! Please sign in to continue.</p>
         </div>
         

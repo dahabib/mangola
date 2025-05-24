@@ -31,7 +31,7 @@
 </script>
 
 <svelte:head>
-  <title>Your Orders | Mango Paradise</title>
+  <title>Your Orders | Mangola</title>
 </svelte:head>
 
 <div>

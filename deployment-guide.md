@@ -1,6 +1,6 @@
-# Deployment Guide for Mango Paradise
+# Deployment Guide for Mangola
 
-This guide will help you deploy the Mango Paradise e-commerce application to your personal VPS (Virtual Private Server).
+This guide will help you deploy the Mangola e-commerce application to your personal VPS (Virtual Private Server).
 
 ## Prerequisites
 
@@ -14,11 +14,13 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
 ## Step 1: Clone and Prepare the Application
 
 1. Connect to your VPS via SSH
+
    ```bash
    ssh username@your-vps-ip
    ```
 
 2. Create a directory for your application
+
    ```bash
    mkdir -p /var/www/mango-paradise
    cd /var/www/mango-paradise
@@ -27,6 +29,7 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
 3. Clone your repository or upload your files to this directory
 
 4. Install dependencies
+
    ```bash
    npm install
    ```
@@ -41,11 +44,13 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
 ## Step 2: Set Up the Database
 
 1. Create a PostgreSQL database for the application
+
    ```bash
    sudo -u postgres psql
    ```
 
 2. In the PostgreSQL shell, create a database and user
+
    ```sql
    CREATE DATABASE mango_paradise;
    CREATE USER mango_user WITH ENCRYPTED PASSWORD 'your-strong-password';
@@ -54,6 +59,7 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
    ```
 
 3. Update your `.env` file with the database connection information
+
    ```
    DATABASE_URL="postgresql://mango_user:your-strong-password@localhost:5432/mango_paradise"
    ```
@@ -73,21 +79,25 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
 ## Step 4: Set Up PM2 for Process Management
 
 1. Create a PM2 configuration file named `ecosystem.config.js`
+
    ```javascript
    module.exports = {
-     apps: [{
-       name: 'mango-paradise',
-       script: 'build/index.js',
-       instances: 'max',
-       exec_mode: 'cluster',
-       env: {
-         NODE_ENV: 'production',
-       }
-     }]
+     apps: [
+       {
+         name: "mango-paradise",
+         script: "build/index.js",
+         instances: "max",
+         exec_mode: "cluster",
+         env: {
+           NODE_ENV: "production",
+         },
+       },
+     ],
    };
    ```
 
 2. Start the application with PM2
+
    ```bash
    pm2 start ecosystem.config.js
    ```
@@ -101,22 +111,25 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
 ## Step 5: Set Up Nginx as a Reverse Proxy
 
 1. Install Nginx if not already installed
+
    ```bash
    sudo apt update
    sudo apt install nginx
    ```
 
 2. Create an Nginx configuration file for your application
+
    ```bash
    sudo nano /etc/nginx/sites-available/mango-paradise
    ```
 
 3. Add the following configuration (replace `yourdomain.com` with your domain)
+
    ```nginx
    server {
        listen 80;
        server_name yourdomain.com www.yourdomain.com;
-       
+
        location / {
            proxy_pass http://localhost:3000;
            proxy_http_version 1.1;
@@ -129,6 +142,7 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
    ```
 
 4. Create a symbolic link to enable the site
+
    ```bash
    sudo ln -s /etc/nginx/sites-available/mango-paradise /etc/nginx/sites-enabled/
    ```
@@ -142,11 +156,13 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
 ## Step 6: Set Up SSL with Let's Encrypt
 
 1. Install Certbot
+
    ```bash
    sudo apt install certbot python3-certbot-nginx
    ```
 
 2. Obtain an SSL certificate
+
    ```bash
    sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
    ```
@@ -156,6 +172,7 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
 ## Step 7: Set Up Stripe Webhook
 
 1. Configure Stripe webhook to point to your production domain
+
    ```
    https://yourdomain.com/api/webhook
    ```
@@ -165,6 +182,7 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
 ## Step 8: Set Up Auth.js
 
 1. Configure Auth.js for production by updating your `.env` file with the correct production URLs
+
    ```
    ORIGIN="https://yourdomain.com"
    ```
@@ -178,11 +196,13 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
 ## Step 9: Monitoring and Maintenance
 
 1. Set up application monitoring with PM2
+
    ```bash
    pm2 monitor
    ```
 
 2. Set up automatic updates for security patches
+
    ```bash
    sudo apt update && sudo apt upgrade
    ```
@@ -196,11 +216,13 @@ This guide will help you deploy the Mango Paradise e-commerce application to you
 ## Troubleshooting
 
 - Check application logs
+
   ```bash
   pm2 logs
   ```
 
 - Check Nginx logs
+
   ```bash
   sudo tail -f /var/log/nginx/error.log
   sudo tail -f /var/log/nginx/access.log

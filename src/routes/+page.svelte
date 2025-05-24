@@ -2,7 +2,7 @@
   import { fly } from 'svelte/transition';
   import { onMount } from 'svelte';
   import ProductCard from '$lib/components/ProductCard.svelte';
-  import type { Product } from '$lib/types';
+  import type { Product, Review } from '$lib/types';
   import { addToCart } from '$lib/stores/cartStore';
   
   // Demo products - would come from API/database in production
@@ -41,6 +41,27 @@
     }
   ];
 
+  const reviews: Review = [
+        {
+          name: "Sarah Johnson",
+          role: "Food Blogger",
+          image: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+          text: "I've tried mangoes from all over, but nothing compares to the Alphonso mangoes from Mangola. The flavor is incredible!"
+        },
+        {
+          name: "Michael Chen",
+          role: "Chef",
+          image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+          text: "As a chef, I'm extremely particular about my ingredients. These mangoes are consistently perfect - sweet, fragrant, and ideal for both savory and dessert applications."
+        },
+        {
+          name: "Emma Rodriguez",
+          role: "Mango Enthusiast",
+          image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+          text: "The Mixed Variety Pack is amazing! It's like a mango tasting tour without leaving home. The packaging is eco-friendly and keeps them perfectly ripened."
+        }
+      ];
+
   let activeSection = "hero";
 
   onMount(() => {
@@ -67,7 +88,7 @@
 </script>
 
 <svelte:head>
-  <title>Mango Paradise | Premium Mango Delivery</title>
+  <title>Mangola | Premium Mango Delivery</title>
   <meta name="description" content="The finest selection of premium mangoes delivered fresh to your door." />
 </svelte:head>
 
@@ -85,7 +106,7 @@
   <div class="container-custom relative z-10 text-white text-center">
     <div in:fly={{ y: 20, duration: 800, delay: 200 }}>
       <h1 class="font-display text-5xl md:text-7xl font-bold mb-4 drop-shadow-lg">
-        Mango Paradise
+        Mangola
       </h1>
       <p class="text-xl md:text-2xl max-w-2xl mx-auto mb-8 drop-shadow-md">
         Experience the extraordinary taste of premium, handpicked mangoes delivered fresh to your doorstep
@@ -142,7 +163,7 @@
       <div class="order-2 lg:order-1">
         <h2 class="text-primary-800 mb-6">Our Mango Story</h2>
         <p class="text-gray-700 mb-4">
-          At Mango Paradise, our journey began with a simple desire: to share the incredible
+          At Mangola, our journey began with a simple desire: to share the incredible
           joy of perfectly ripened mangoes with mango enthusiasts everywhere.
         </p>
         <p class="text-gray-700 mb-4">
@@ -177,31 +198,12 @@
       <h2 class="text-primary-800 mb-4">What Our Customers Say</h2>
       <p class="text-gray-600 max-w-2xl mx-auto">
         Don't just take our word for it - hear from mango lovers who've experienced
-        the Mango Paradise difference.
+        the Mangola difference.
       </p>
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {#each [
-        {
-          name: "Sarah Johnson",
-          role: "Food Blogger",
-          image: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-          text: "I've tried mangoes from all over, but nothing compares to the Alphonso mangoes from Mango Paradise. The flavor is incredible!"
-        },
-        {
-          name: "Michael Chen",
-          role: "Chef",
-          image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-          text: "As a chef, I'm extremely particular about my ingredients. These mangoes are consistently perfect - sweet, fragrant, and ideal for both savory and dessert applications."
-        },
-        {
-          name: "Emma Rodriguez",
-          role: "Mango Enthusiast",
-          image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-          text: "The Mixed Variety Pack is amazing! It's like a mango tasting tour without leaving home. The packaging is eco-friendly and keeps them perfectly ripened."
-        }
-      ] as {name: string, role: string, image: string, text: string}[], i (testimonial, i)}
+      {#each reviews as testimonial, i (testimonial, i)}
         <div 
           class="bg-white p-6 rounded-lg shadow-md" 
           in:fly={{ y: 20, duration: 400, delay: 100 * i }}
