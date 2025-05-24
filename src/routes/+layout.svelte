@@ -7,38 +7,38 @@
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
 
-  type CartItem = {
-    id: string;
-    quantity: number;
-  };
+  // type CartItem = {
+  //   id: string;
+  //   quantity: number;
+  // };
 
-  type Cart = CartItem[]; 
+  // type Cart = CartItem[]; 
   
-  onMount(() => {
-    if (!browser) return;
+  // onMount(() => {
+  //   if (!browser) return;
 
-    const loadCart = () => {
-      try {
-        const savedCart = localStorage.getItem('mango-cart');
-        if (savedCart) {
-          const parsed: Cart = JSON.parse(savedCart);
-          $cart = parsed;
-        }
-      } catch (e) {
-        console.error('Error parsing saved cart', e);
-        $cart = [];
-      }
-    };
+  //   const loadCart = () => {
+  //     try {
+  //       const savedCart = localStorage.getItem('mango-cart');
+  //       if (savedCart) {
+  //         const parsed: Cart = JSON.parse(savedCart);
+  //         $cart = parsed;
+  //       }
+  //     } catch (e) {
+  //       console.error('Error parsing saved cart', e);
+  //       $cart = [];
+  //     }
+  //   };
 
-    loadCart();
+  //   loadCart();
 
-    // Subscribe to cart changes and save to localStorage
-    const unsubscribe = cart.subscribe((value: Cart) => {
-      localStorage.setItem('mango-cart', JSON.stringify(value));
-    });
+  //   // Subscribe to cart changes and save to localStorage
+  //   const unsubscribe = cart.subscribe((value: Cart) => {
+  //     localStorage.setItem('mango-cart', JSON.stringify(value));
+  //   });
 
-    return unsubscribe;
-  });
+  //   return unsubscribe;
+  // });
 </script>
 
 <div class="flex flex-col min-h-screen">
