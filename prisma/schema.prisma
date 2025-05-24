@@ -9,18 +9,18 @@ datasource db {
 
 // Auth.js schema
 model Account {
-  id                 String    @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?   @db.Text
-  access_token       String?   @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?   @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -57,29 +57,29 @@ model VerificationToken {
 
 // Application schema
 model Product {
-  id          String   @id @default(cuid())
+  id          String      @id @default(cuid())
   name        String
   description String
   price       Float
   image       String
   category    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   orderItems  OrderItem[]
 }
 
 model Order {
-  id               String      @id @default(cuid())
-  userId           String
-  user             User        @relation(fields: [userId], references: [id])
-  items            OrderItem[]
-  total            Float
-  status           String      @default("pending")
-  paymentIntentId  String?
+  id                String      @id @default(cuid())
+  userId            String
+  user              User        @relation(fields: [userId], references: [id])
+  items             OrderItem[]
+  total             Float
+  status            String      @default("pending")
+  paymentIntentId   String?
   shippingAddressId String
-  shippingAddress  Address     @relation(fields: [shippingAddressId], references: [id])
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
+  shippingAddress   Address     @relation(fields: [shippingAddressId], references: [id])
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
 }
 
 model OrderItem {
@@ -93,16 +93,14 @@ model OrderItem {
 }
 
 model Address {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  firstName String
-  lastName  String
-  address   String
-  city      String
-  state     String?
-  zipCode   String
-  country   String
-  isDefault Boolean  @default(false)
-  orders    Order[]
+  id         String  @id @default(cuid())
+  userId     String
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName   String
+  address    String
+  postOffice String
+  upazilla   String
+  district   String
+  isDefault  Boolean @default(false)
+  orders     Order[]
 }

@@ -1,33 +1,43 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import '../app.css';
   import Header from '$lib/components/Header.svelte';
   import Footer from '$lib/components/Footer.svelte';
   import { cart } from '$lib/stores/cartStore';
   import { fade } from 'svelte/transition';
   import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
+
+  type CartItem = {
+    id: string;
+    quantity: number;
+  };
+
+  type Cart = CartItem[]; 
   
-  // Load cart from localStorage on mount (client-side only)
   onMount(() => {
-    const savedCart = localStorage.getItem('mango-cart');
-    if (savedCart) {
+    if (!browser) return;
+
+    const loadCart = () => {
       try {
-        $cart = JSON.parse(savedCart);
+        const savedCart = localStorage.getItem('mango-cart');
+        if (savedCart) {
+          const parsed: Cart = JSON.parse(savedCart);
+          $cart = parsed;
+        }
       } catch (e) {
         console.error('Error parsing saved cart', e);
+        $cart = [];
       }
-    }
-    
-    // Subscribe to cart changes and save to localStorage
-    const unsubscribe = cart.subscribe(value => {
-      if (typeof localStorage !== 'undefined') {
-        localStorage.setItem('mango-cart', JSON.stringify(value));
-      }
-    });
-    
-    return () => {
-      unsubscribe();
     };
+
+    loadCart();
+
+    // Subscribe to cart changes and save to localStorage
+    const unsubscribe = cart.subscribe((value: Cart) => {
+      localStorage.setItem('mango-cart', JSON.stringify(value));
+    });
+
+    return unsubscribe;
   });
 </script>
 

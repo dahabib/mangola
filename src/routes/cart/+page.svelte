@@ -1,16 +1,23 @@
 <script lang="ts">
   import { fly, slide } from 'svelte/transition';
   import { flip } from 'svelte/animate';
-  import { cart, removeFromCart, updateQuantity, clearCart, getCartTotal } from '$lib/stores/cartStore';
+  import { cart, removeFromCart, updateQuantity, clearCart, cartTotal } from '$lib/stores/cartStore';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
   
+  // Shipping cost (could be moved to a config file)
+  const shippingCost = 9.99;
+  const freeShippingThreshold = 100;
+  
+  // Calculate if free shipping applies
+  $: freeShipping = $cartTotal >= freeShippingThreshold;
+  $: total = $cartTotal + (freeShipping ? 0 : shippingCost);
+  
+  // Only show content when mounted (SSR compatibility)
   let mounted = false;
-  
-  onMount(() => {
-    mounted = true;
-  });
+  onMount(() => (mounted = true));
   
   function handleCheckout() {
     if ($cart.length === 0) return;
@@ -37,12 +44,14 @@
                   class="p-4 flex flex-col sm:flex-row sm:items-center gap-4" 
                   animate:flip={{ duration: 300 }}
                   in:fly={{ y: 20, duration: 300, delay: 50 * i }}
+                  out:slide={{ duration: 200 }}
                 >
                   <div class="flex-shrink-0 w-20 h-20">
                     <img 
                       src={item.image} 
                       alt={item.name} 
                       class="w-full h-full object-cover rounded"
+                      loading="lazy"
                     />
                   </div>
                   
@@ -53,7 +62,7 @@
                   
                   <div class="flex items-center">
                     <button 
-                      class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition"
+                      class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
                       on:click={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
                       aria-label="Decrease quantity"
                     >
@@ -67,7 +76,7 @@
                     </span>
                     
                     <button 
-                      class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition"
+                      class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
                       on:click={() => updateQuantity(item.id, item.quantity + 1)}
                       aria-label="Increase quantity"
                     >
@@ -80,7 +89,7 @@
                   <div class="text-right">
                     <p class="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
                     <button 
-                      class="text-sm text-red-500 hover:text-red-700 mt-1"
+                      class="text-sm text-red-500 hover:text-red-700 mt-1 transition-colors"
                       on:click={() => removeFromCart(item.id)}
                     >
                       Remove
@@ -93,15 +102,15 @@
           
           <div class="mt-4 flex justify-between">
             <button 
-              class="text-primary-600 hover:text-primary-800 text-sm font-medium"
+              class="text-primary-600 hover:text-primary-800 text-sm font-medium transition-colors"
               on:click={() => goto('/shop')}
             >
               ← Continue Shopping
             </button>
             
             <button 
-              class="text-red-500 hover:text-red-700 text-sm font-medium"
-              on:click={() => clearCart()}
+              class="text-red-500 hover:text-red-700 text-sm font-medium transition-colors"
+              on:click={clearCart}
             >
               Clear Cart
             </button>
@@ -116,30 +125,41 @@
             <div class="space-y-3 mb-6">
               <div class="flex justify-between">
                 <span class="text-gray-600">Subtotal</span>
-                <span class="font-medium">${getCartTotal().toFixed(2)}</span>
+                <span class="font-medium">${$cartTotal.toFixed(2)}</span>
               </div>
+              
               <div class="flex justify-between">
                 <span class="text-gray-600">Shipping</span>
-                <span class="font-medium">$9.99</span>
+                <span class="font-medium">
+                  {#if freeShipping}
+                    <span class="text-green-600">Free</span>
+                  {:else}
+                    ${shippingCost.toFixed(2)}
+                  {/if}
+                </span>
               </div>
+              
               <div class="border-t border-gray-200 pt-3 flex justify-between">
                 <span class="font-semibold">Total</span>
                 <span class="font-bold text-primary-800">
-                  ${(getCartTotal() + 9.99).toFixed(2)}
+                  ${total.toFixed(2)}
                 </span>
               </div>
             </div>
             
             <button 
               on:click={handleCheckout}
-              class="w-full btn-primary py-3 flex items-center justify-center"
+              class="w-full btn-primary py-3 flex items-center justify-center transition-colors hover:bg-primary-700"
+              disabled={$cart.length === 0}
             >
               Proceed to Checkout
             </button>
             
-            <p class="text-xs text-gray-500 text-center mt-4">
-              Free shipping on orders over $100
-            </p>
+            {#if !freeShipping}
+              <p class="text-xs text-gray-500 text-center mt-4">
+                Spend ${(freeShippingThreshold - $cartTotal).toFixed(2)} more for free shipping
+              </p>
+            {/if}
           </div>
         </div>
       </div>
@@ -152,7 +172,7 @@
         </div>
         <h2 class="text-2xl font-semibold text-gray-800 mb-2">Your cart is empty</h2>
         <p class="text-gray-600 mb-6">Looks like you haven't added any mangoes to your cart yet.</p>
-        <a href="/shop" class="btn-primary inline-block">
+        <a href="/shop" class="btn-primary inline-block transition-colors hover:bg-primary-700">
           Start Shopping
         </a>
       </div>
