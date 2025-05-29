@@ -1,11 +1,20 @@
-import { writable, derived, get as getStoreValue } from 'svelte/store';
-import { browser } from '$app/environment';
-import type { Product, CartItem } from '$lib/types';
+import { writable, derived, get as getStoreValue } from "svelte/store";
+import { browser } from "$app/environment";
+import type { Product, CartItem } from "$lib/types";
 
 // Initialize cart with localStorage data if available
-const initialCart: CartItem[] = browser 
-  ? JSON.parse(localStorage.getItem('mango-cart') || [] 
-  : [];
+let initialCart: CartItem[] = [];
+
+if (browser) {
+  try {
+    const stored = localStorage.getItem("mango-cart");
+    initialCart = stored ? JSON.parse(stored) : [];
+  } catch (e) {
+    console.warn("Corrupted cart in localStorage, resetting.");
+    localStorage.removeItem("mango-cart");
+    initialCart = [];
+  }
+}
 
 export const cart = writable<CartItem[]>(initialCart);
 
@@ -13,9 +22,9 @@ export const cart = writable<CartItem[]>(initialCart);
 if (browser) {
   cart.subscribe((items) => {
     try {
-      localStorage.setItem('mango-cart', JSON.stringify(items));
+      localStorage.setItem("mango-cart", JSON.stringify(items));
     } catch (error) {
-      console.error('Failed to persist cart:', error);
+      console.error("Failed to persist cart:", error);
       // Handle storage quota exceeded or other errors
     }
   });
@@ -23,12 +32,12 @@ if (browser) {
 
 // Existing cart functions (with minor optimizations)
 export function addToCart(product: Product) {
-  cart.update(items => {
-    const existingItem = items.find(item => item.id === product.id);
+  cart.update((items) => {
+    const existingItem = items.find((item) => item.id === product.id);
     return existingItem
-      ? items.map(item => 
-          item.id === product.id 
-            ? { ...item, quantity: item.quantity + 1 } 
+      ? items.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
             : item
         )
       : [...items, { ...product, quantity: 1 }];
@@ -36,14 +45,14 @@ export function addToCart(product: Product) {
 }
 
 export function removeFromCart(productId: string) {
-  cart.update(items => items.filter(item => item.id !== productId));
+  cart.update((items) => items.filter((item) => item.id !== productId));
 }
 
 export function updateQuantity(productId: string, quantity: number) {
-  cart.update(items => 
+  cart.update((items) =>
     quantity <= 0
-      ? items.filter(item => item.id !== productId)
-      : items.map(item => 
+      ? items.filter((item) => item.id !== productId)
+      : items.map((item) =>
           item.id === productId ? { ...item, quantity } : item
         )
   );
@@ -54,11 +63,11 @@ export function clearCart() {
 }
 
 // Derived stores for common calculations
-export const cartTotal = derived(cart, $cart => 
+export const cartTotal = derived(cart, ($cart) =>
   $cart.reduce((total, item) => total + item.price * item.quantity, 0)
 );
 
-export const cartItemsCount = derived(cart, $cart => 
+export const cartItemsCount = derived(cart, ($cart) =>
   $cart.reduce((count, item) => count + item.quantity, 0)
 );
 
